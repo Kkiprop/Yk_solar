@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 
+import { Admin } from '../models/Admin.js';
+
 export const requireAdminAuth = async (request, response, next) => {
   const authHeader = request.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
@@ -10,16 +12,17 @@ export const requireAdminAuth = async (request, response, next) => {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET || 'development-secret-change-me');
-    const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+    const admin = await Admin.findById(payload.sub).select('name email lastLoginAt');
 
-    if (!configuredEmail || payload.email !== configuredEmail || payload.role !== 'admin') {
+    if (!admin || payload.role !== 'admin' || payload.email !== admin.email) {
       return response.status(401).json({ message: 'Authentication failed.' });
     }
 
     request.admin = {
-      id: payload.sub,
-      name: process.env.ADMIN_NAME?.trim() || 'Yk Solarworks Admin',
-      email: configuredEmail,
+      id: admin._id.toString(),
+      name: admin.name,
+      email: admin.email,
+      lastLoginAt: admin.lastLoginAt,
     };
 
     return next();

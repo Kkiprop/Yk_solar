@@ -31,6 +31,10 @@ const siteContentSchema = new mongoose.Schema(
       type: Mixed,
       required: true,
     },
+    projects: {
+      type: Mixed,
+      required: true,
+    },
     whySolar: {
       type: Mixed,
       required: true,

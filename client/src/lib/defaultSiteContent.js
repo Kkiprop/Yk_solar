@@ -72,6 +72,13 @@ export const defaultSiteContent = {
       },
     ],
   },
+  projects: {
+    eyebrow: 'Portfolio',
+    title: 'Recent Installations',
+    description: 'Real results from our latest deployments across the region.',
+    emptyState: 'No published projects yet. Use the admin dashboard to add the first one.',
+    fallbackImageUrl: 'https://media.istockphoto.com/id/1405880267/photo/two-engineers-installing-solar-panels-on-roof.webp?a=1&b=1&s=612x612',
+  },
   whySolar: {
     eyebrow: 'Why Solar Now',
     title: 'Four scrolls from energy risk to energy control',

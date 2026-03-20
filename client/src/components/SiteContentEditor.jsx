@@ -246,6 +246,29 @@ export function SiteContentEditor({ siteContent, setSiteContent, onSave, saving,
             </div>
           </EditorCard>
 
+          <EditorCard title="Projects" description="Portfolio section copy and fallback image used for project cards without a custom image.">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Projects eyebrow">
+                <input className="field-input" value={siteContent.projects.eyebrow} onChange={handleFieldChange('projects.eyebrow')} />
+              </Field>
+              <Field label="Projects title">
+                <input className="field-input" value={siteContent.projects.title} onChange={handleFieldChange('projects.title')} />
+              </Field>
+            </div>
+
+            <Field label="Projects description">
+              <textarea className="field-input min-h-[110px] resize-y" value={siteContent.projects.description} onChange={handleFieldChange('projects.description')} />
+            </Field>
+
+            <Field label="Empty state message">
+              <textarea className="field-input min-h-[110px] resize-y" value={siteContent.projects.emptyState} onChange={handleFieldChange('projects.emptyState')} />
+            </Field>
+
+            <Field label="Fallback image URL">
+              <input className="field-input" value={siteContent.projects.fallbackImageUrl} onChange={handleFieldChange('projects.fallbackImageUrl')} />
+            </Field>
+          </EditorCard>
+
           <EditorCard title="Why Solar" description="Scroll sequence, battery section headings, and stage copy.">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Why Solar eyebrow">

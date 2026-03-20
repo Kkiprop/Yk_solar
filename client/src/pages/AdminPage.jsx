@@ -16,8 +16,8 @@ const initialForm = {
 };
 
 const initialCredentials = {
-  email: 'admin@yksolarworks.com',
-  password: 'YkSolar@2026',
+  email: '',
+  password: '',
 };
 
 const adminTabs = [
@@ -282,7 +282,7 @@ export function AdminPage() {
             Login to the dashboard
           </h1>
           <p className="mt-4 text-base leading-7 text-slate-600">
-            Use the seeded admin credentials from the server environment to manage site content.
+            Use an admin account stored in the database to manage site content.
           </p>
 
           <form className="mt-8 space-y-5" onSubmit={handleLogin}>
@@ -292,6 +292,7 @@ export function AdminPage() {
                 className="field-input"
                 name="email"
                 type="email"
+                placeholder="admin@yksolarworks.com"
                 value={credentials.email}
                 onChange={handleCredentialsChange}
                 required
@@ -304,6 +305,7 @@ export function AdminPage() {
                 className="field-input"
                 name="password"
                 type="password"
+                placeholder="Enter your password"
                 value={credentials.password}
                 onChange={handleCredentialsChange}
                 required

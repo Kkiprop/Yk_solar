@@ -54,7 +54,23 @@ The repository root is configured for Vercel.
 - Build command: `npm run build`
 - Output directory: `client/dist`
 
-The frontend can be deployed as a static Vite app. If the API is hosted separately, set `VITE_API_URL` in Vercel to that backend URL.
+The project deploys both the Vite frontend and the Express API from the same Vercel project.
+
+Required Vercel environment variables:
+
+- `MONGODB_URI`
+- `MONGODB_DB_NAME`
+- `ADMIN_NAME`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+- `JWT_SECRET`
+- `CLIENT_URL`
+
+Notes:
+
+- Leave `VITE_API_URL` unset when the frontend and API are deployed together on the same Vercel project.
+- On first backend startup, the API seeds or updates the admin account in MongoDB from `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME`.
+- Admin login uses the MongoDB `Admin` collection, not hardcoded frontend credentials.
 
 ## API routes
 

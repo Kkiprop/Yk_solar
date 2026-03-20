@@ -9,6 +9,7 @@ const getSiteContentPayload = (body = {}) => ({
   metrics: body.metrics,
   about: body.about,
   services: body.services,
+  projects: body.projects,
   whySolar: body.whySolar,
   team: body.team,
   pricing: body.pricing,

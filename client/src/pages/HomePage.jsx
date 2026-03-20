@@ -39,144 +39,6 @@ const getWhatsAppHref = (phone = '') => {
   return `https://wa.me/${digits}`;
 };
 
-const metrics = [
-  { value: '120+', label: 'Projects delivered' },
-  { value: '92%', label: 'Avg. bill reduction' },
-  { value: '25 years', label: 'Performance life' },
-];
-
-const aboutHighlights = [
-  {
-    title: 'Site-first design',
-    description: 'Every project starts with a structural review, load analysis, and real consumption mapping.',
-  },
-  {
-    title: 'Execution discipline',
-    description: 'In-house coordination keeps approvals, mounting, cabling, and commissioning aligned.',
-  },
-  {
-    title: 'Long-term support',
-    description: 'We stay involved after installation with monitoring, maintenance guidance, and system upgrades.',
-  },
-];
-
-const challengeStages = [
-  {
-    phase: 'Scroll 01',
-    title: 'Tariff pressure keeps stacking',
-    disadvantage: 'Grid-only power leaves you exposed to rising tariffs and unstable daytime supply when usage is highest.',
-    statValue: '8-15%',
-    statLabel: 'Annual tariff pressure many businesses face',
-  },
-  {
-    phase: 'Scroll 02',
-    title: 'Backup power keeps burning cash',
-    disadvantage: 'Generators reduce outage pain with noise, fuel logistics, and recurring maintenance that compounds monthly.',
-    statValue: 'Fuel + service',
-    statLabel: 'Ongoing operating burden of conventional backup power',
-  },
-];
-
-const advantageStages = [
-  {
-    phase: 'Scroll 03',
-    title: 'Solar begins offsetting peak demand',
-    advantage: 'Solar converts your roof into a productive asset that cuts the most expensive daytime consumption first.',
-    statValue: '50%',
-    statLabel: 'Battery charge after the first solar gain stage',
-  },
-  {
-    phase: 'Scroll 04',
-    title: 'Storage turns savings into resilience',
-    advantage: 'Battery-backed solar delivers silent reserve power, stronger savings, and long-term operational control.',
-    statValue: '100%',
-    statLabel: 'Battery charge when the solar story fully lands',
-  },
-];
-
-const solarTimeline = [
-  {
-    phase: 'Scroll 01',
-    title: challengeStages[0].title,
-    summary: challengeStages[0].disadvantage,
-    statValue: challengeStages[0].statValue,
-    statLabel: challengeStages[0].statLabel,
-    chargePercent: 0,
-  },
-  {
-    phase: 'Scroll 02',
-    title: challengeStages[1].title,
-    summary: challengeStages[1].disadvantage,
-    statValue: challengeStages[1].statValue,
-    statLabel: challengeStages[1].statLabel,
-    chargePercent: 0,
-  },
-  {
-    phase: 'Scroll 03',
-    title: advantageStages[0].title,
-    summary: advantageStages[0].advantage,
-    statValue: advantageStages[0].statValue,
-    statLabel: advantageStages[0].statLabel,
-    chargePercent: 50,
-  },
-  {
-    phase: 'Scroll 04',
-    title: advantageStages[1].title,
-    summary: advantageStages[1].advantage,
-    statValue: advantageStages[1].statValue,
-    statLabel: advantageStages[1].statLabel,
-    chargePercent: 100,
-  },
-];
-
-const urgencySignals = [
-  'Electricity tariffs are still trending upward, so every delayed month is another high bill absorbed in full.',
-  'Installation calendars fill fastest before peak summer demand, especially for larger commercial sites.',
-  'Early consultations give more room for better panel placement, battery sizing, and phased expansion planning.',
-];
-
-const pricingPlans = [
-  {
-    capacity: '2 kWh',
-    price: '125,000',
-    subsidy: '110,000',
-    centerSubsidy: '60,000',
-    stateSubsidy: '50,000',
-    note: 'Best for compact homes starting their solar transition.',
-  },
-  {
-    capacity: '3 kWh',
-    price: '180,000',
-    subsidy: '78,000',
-    centerSubsidy: 'Included',
-    stateSubsidy: 'Included',
-    note: 'Balanced sizing for small families with daytime appliance usage.',
-  },
-  {
-    capacity: '5 kWh',
-    price: '260,000',
-    subsidy: '78,000',
-    centerSubsidy: 'Included',
-    stateSubsidy: 'Included',
-    note: 'Stronger output for larger homes and businesses with higher loads.',
-  },
-];
-
-const footerLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Why Solar', href: '#why-solar' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' },
-];
-
-const team = [
-  { name: 'Lead Engineer', role: 'System Design', img: 'https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=600' },
-  { name: 'Project Manager', role: 'Operations', img: 'https://images.unsplash.com/photo-1595211877493-41a4e5f236b3?q=80' },
-  { name: 'Technical Lead', role: 'Installation', img: 'https://images.unsplash.com/photo-1629425733761-caae3b5f2e50?q=80' },
-];
-
 export function HomePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -264,6 +126,7 @@ export function HomePage() {
   const metricItems = siteContent.metrics;
   const aboutContent = siteContent.about;
   const servicesContent = siteContent.services;
+  const projectsContent = siteContent.projects;
   const whySolarContent = siteContent.whySolar;
   const teamContent = siteContent.team;
   const pricingContent = siteContent.pricing;
@@ -663,16 +526,16 @@ export function HomePage() {
           className="mt-10 rounded-[36px] border border-brand-moss/70 bg-gradient-to-br from-brand-sun via-white to-brand-moss/60 px-5 py-16 shadow-glow sm:px-8"
         >
           <SectionHeading
-            eyebrow="Portfolio"
-            title="Recent Installations"
-            description="Real results from our latest deployments across the region."
+            eyebrow={projectsContent.eyebrow}
+            title={projectsContent.title}
+            description={projectsContent.description}
           />
 
           {loading ? (
             <p className="mt-8 text-base text-slate-600">Loading projects...</p>
           ) : posts.length === 0 ? (
             <div className="mt-8 rounded-[28px] border border-brand-moss/80 bg-white/80 p-6 text-slate-600">
-              No published projects yet. Use the admin dashboard to add the first one.
+              {projectsContent.emptyState}
             </div>
           ) : (
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
@@ -681,8 +544,7 @@ export function HomePage() {
                   <div className="overflow-hidden">
                     <img
                       src={
-                        post.imageUrl ||
-                        'https://media.istockphoto.com/id/1405880267/photo/two-engineers-installing-solar-panels-on-roof.webp?a=1&b=1&s=612x612'
+                        post.imageUrl || projectsContent.fallbackImageUrl
                       }
                       alt={post.title}
                       className="h-60 w-full object-cover transition duration-500 hover:scale-105"
