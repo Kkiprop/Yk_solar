@@ -30,8 +30,6 @@ Optional frontend override:
 
 ```bash
 npm install
-cd server && npm install
-cd ../client && npm install
 ```
 
 ## Run locally
@@ -47,6 +45,16 @@ This starts:
 - API: `http://localhost:5000`
 - Frontend: `http://localhost:5173`
 - Admin page: `http://localhost:5173/admin`
+
+## Vercel deployment
+
+The repository root is configured for Vercel.
+
+- Install command: `npm install`
+- Build command: `npm run build`
+- Output directory: `client/dist`
+
+The frontend can be deployed as a static Vite app. If the API is hosted separately, set `VITE_API_URL` in Vercel to that backend URL.
 
 ## API routes
 
