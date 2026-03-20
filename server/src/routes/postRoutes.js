@@ -30,6 +30,8 @@ router.get('/site-content', asyncHandler(getSiteContent));
 router.post('/contact-inquiries', asyncHandler(createContactInquiry));
 router.post('/auth/login', asyncHandler(loginAdmin));
 router.get('/auth/me', requireAdminAuth, asyncHandler(getCurrentAdmin));
+router.post('/admin/login', asyncHandler(loginAdmin));
+router.get('/admin/me', requireAdminAuth, asyncHandler(getCurrentAdmin));
 
 router.get('/admin/dashboard', requireAdminAuth, asyncHandler(getAdminDashboard));
 router.get('/admin/posts', requireAdminAuth, asyncHandler(getAdminPosts));

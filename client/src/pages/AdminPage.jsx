@@ -80,7 +80,7 @@ export function AdminPage() {
     }
 
     try {
-      const meResponse = await api.get('/auth/me');
+      const meResponse = await api.get('/admin/me');
       setAdmin(meResponse.data.admin);
       setIsAuthenticated(true);
       setLoading(true);
@@ -122,7 +122,7 @@ export function AdminPage() {
     setAuthMessage('');
 
     try {
-      const response = await api.post('/auth/login', credentials);
+      const response = await api.post('/admin/login', credentials);
       setAdminToken(response.data.token);
       setAdmin(response.data.admin);
       setIsAuthenticated(true);
