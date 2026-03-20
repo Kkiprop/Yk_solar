@@ -30,8 +30,6 @@ Optional frontend override:
 
 ```bash
 npm install
-cd server && npm install
-cd ../client && npm install
 ```
 
 ## Run locally
@@ -47,6 +45,36 @@ This starts:
 - API: `http://localhost:5000`
 - Frontend: `http://localhost:5173`
 - Admin page: `http://localhost:5173/admin`
+
+## Deploy on Vercel
+
+This repository can be deployed as a single Vercel project:
+
+- `client` builds to a static Vite site
+- `api/[...path].js` serves the Express API as a Vercel Function
+
+Required Vercel environment variables:
+
+- `MONGODB_URI`
+- `MONGODB_DB_NAME`
+- `JWT_SECRET`
+- `CLIENT_URL` set to your production frontend origin, for example `https://your-project.vercel.app`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_FROM`
+- `CONTACT_NOTIFICATION_TO`
+- `ADMIN_NAME`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+
+Notes:
+
+- The root project must be deployed from the repository root so Vercel picks up `vercel.json` and the npm workspaces.
+- The frontend uses `/api` by default in production, so `VITE_API_URL` is not required unless you want to call a different backend.
+- The `/admin` route is rewritten to `index.html` so the SPA can handle client-side routing.
 
 ## API routes
 
