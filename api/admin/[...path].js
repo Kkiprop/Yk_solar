@@ -4,7 +4,10 @@ import { connectDatabase } from '../../server/src/config/db.js';
 export default async function handler(request, response) {
   try {
     const requestUrl = request.url || '/';
-    request.url = `/api/admin${requestUrl.startsWith('/') ? requestUrl : `/${requestUrl}`}`;
+
+    if (!requestUrl.startsWith('/api/admin')) {
+      request.url = `/api/admin${requestUrl.startsWith('/') ? requestUrl : `/${requestUrl}`}`;
+    }
 
     await connectDatabase();
     return app(request, response);
