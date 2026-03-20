@@ -6,9 +6,10 @@ export default {
         brand: {
           ink: '#0f172a',
           green: '#7bc043',
-          moss: '#dcf1c8',
-          leaf: '#507f2d',
-          cream: '#f7fbf4',
+          moss: '#edf6bf',
+          sun: '#f4f8cf',
+          leaf: '#5a7421',
+          cream: '#fbfdf2',
         },
       },
       fontFamily: {

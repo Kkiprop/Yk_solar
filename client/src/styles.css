@@ -35,11 +35,11 @@
   }
 
   .secondary-btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-brand-moss bg-brand-sun px-5 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5;
   }
 
   .ghost-btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300/80 bg-transparent px-5 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-brand-moss/80 bg-brand-sun/60 px-5 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5;
   }
 
   .field-input {

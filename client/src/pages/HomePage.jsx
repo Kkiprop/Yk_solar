@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaArrowRight,
+  FaBars,
   FaEnvelope,
   FaFacebook,
   FaInstagram,
   FaLinkedin,
   FaPhoneAlt,
+  FaTimes,
   FaTwitter,
+  FaWhatsapp,
 } from 'react-icons/fa';
 
 import brandMark from '../assets/YK_Solarworks_Logo_flat.png';
@@ -25,6 +28,16 @@ const socialIconMap = {
 const getSocialIcon = (platform = '') => socialIconMap[platform.toLowerCase()] || null;
 
 const formatAmount = (value) => (/^[\d,]+$/.test(value) ? `Rs. ${value}` : value);
+
+const getWhatsAppHref = (phone = '') => {
+  const digits = phone.replace(/\D/g, '');
+
+  if (!digits) {
+    return '#contact';
+  }
+
+  return `https://wa.me/${digits}`;
+};
 
 const metrics = [
   { value: '120+', label: 'Projects delivered' },
@@ -168,6 +181,7 @@ export function HomePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [siteContent, setSiteContent] = useState(defaultSiteContent);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [solarProgress, setSolarProgress] = useState(0);
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -231,6 +245,20 @@ export function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    const syncMenuForDesktop = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', syncMenuForDesktop);
+
+    return () => {
+      window.removeEventListener('resize', syncMenuForDesktop);
+    };
+  }, []);
+
   const navLinks = siteContent.nav.links;
   const heroContent = siteContent.hero;
   const metricItems = siteContent.metrics;
@@ -242,6 +270,7 @@ export function HomePage() {
   const urgencyContent = siteContent.urgency;
   const contactContent = siteContent.contact;
   const footerContent = siteContent.footer;
+  const whatsappHref = getWhatsAppHref(contactContent.phone);
   const challengeItems = whySolarContent.challengeStages;
   const advantageItems = whySolarContent.advantageStages;
   const solarTimelineItems = [
@@ -305,15 +334,29 @@ export function HomePage() {
     }
   };
 
+  const handleNavLinkClick = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
       <header>
-        <nav className="glass-panel relative z-20 flex flex-col gap-5 rounded-[28px] px-5 py-5 sm:px-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center">
+        <nav className="glass-panel relative z-20 rounded-[28px] px-5 py-5 sm:px-8 md:flex md:items-center md:justify-between md:gap-6">
+          <div className="flex items-center justify-between gap-4">
             <img src={brandMark} alt="YK Solarworks brand" className="h-16 w-auto object-contain sm:h-[72px]" />
+
+            <button
+              type="button"
+              aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen((current) => !current)}
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-brand-moss bg-brand-sun text-slate-950 md:hidden"
+            >
+              {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+            </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-600 sm:gap-6">
+          <div className="mt-5 hidden items-center gap-4 text-sm font-semibold text-slate-600 sm:gap-6 md:mt-0 md:flex md:flex-1 md:flex-wrap md:justify-end">
             {navLinks.map((link) => (
               <a key={`${link.label}-${link.href}`} className="transition hover:text-slate-950" href={link.href}>
                 {link.label}
@@ -323,6 +366,24 @@ export function HomePage() {
               {siteContent.nav.adminLabel}
             </Link>
           </div>
+
+          {isMobileMenuOpen ? (
+            <div className="mt-5 grid gap-3 rounded-[24px] border border-brand-moss/80 bg-brand-sun/70 p-4 md:hidden">
+              {navLinks.map((link) => (
+                <a
+                  key={`${link.label}-${link.href}-mobile`}
+                  className="rounded-2xl bg-white/70 px-4 py-3 text-sm font-bold text-slate-800 transition hover:bg-white"
+                  href={link.href}
+                  onClick={handleNavLinkClick}
+                >
+                  {link.label}
+                </a>
+              ))}
+              <Link to="/admin" className="ghost-btn w-full justify-center" onClick={handleNavLinkClick}>
+                {siteContent.nav.adminLabel}
+              </Link>
+            </div>
+          ) : null}
         </nav>
 
         <div className="relative mt-6 overflow-hidden rounded-[36px] border border-white/60 bg-white/65 px-5 py-6 shadow-glow backdrop-blur-xl sm:px-8 lg:px-10">
@@ -331,17 +392,17 @@ export function HomePage() {
           <div className="relative z-10 grid gap-10 py-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-center">
             <div className="max-w-2xl">
               <span className="eyebrow-chip">{heroContent.eyebrow}</span>
-              <h1 className="mt-5 max-w-[11ch] font-display text-5xl font-bold leading-[0.92] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
+              <h1 className="mt-5 max-w-[11ch] font-display text-4xl font-bold leading-[0.92] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
                 {heroContent.title}
               </h1>
-              <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
+              <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
                 {heroContent.description}
               </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <a className="primary-btn" href={heroContent.primaryCtaHref}>
+              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+                <a className="primary-btn w-full sm:w-auto" href={heroContent.primaryCtaHref}>
                   {heroContent.primaryCtaLabel} <FaArrowRight />
                 </a>
-                <a className="secondary-btn" href={heroContent.secondaryCtaHref}>
+                <a className="secondary-btn w-full sm:w-auto" href={heroContent.secondaryCtaHref}>
                   {heroContent.secondaryCtaLabel}
                 </a>
               </div>
@@ -367,11 +428,24 @@ export function HomePage() {
       </header>
 
       <main>
-        <section className="mt-8 grid gap-4 rounded-[32px] border border-white/60 bg-slate-950 px-5 py-6 shadow-glow sm:grid-cols-3 sm:px-8">
+
+      <a
+        href={whatsappHref}
+        target={whatsappHref.startsWith('https://wa.me/') ? '_blank' : undefined}
+        rel={whatsappHref.startsWith('https://wa.me/') ? 'noreferrer' : undefined}
+        aria-label="Contact us on WhatsApp"
+        className="fixed bottom-4 right-4 z-40 inline-flex items-center gap-3 rounded-full border border-brand-green/40 bg-brand-green px-4 py-3 text-sm font-extrabold text-white shadow-[0_18px_40px_rgba(123,192,67,0.35)] transition hover:-translate-y-0.5 sm:bottom-6 sm:right-6 sm:px-5 sm:py-4"
+      >
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/18 text-lg sm:h-10 sm:w-10 sm:text-xl">
+          <FaWhatsapp />
+        </span>
+        <span className="hidden sm:block">Contact Us</span>
+      </a>
+        <section className="mt-8 grid gap-4 rounded-[32px] border border-brand-moss/70 bg-brand-sun/90 px-5 py-6 shadow-glow sm:grid-cols-3 sm:px-8">
           {metricItems.map((m) => (
-            <div key={m.label} className="rounded-[24px] border border-white/10 bg-white/5 px-5 py-5">
-              <span className="block font-display text-4xl font-bold text-white">{m.value}</span>
-              <span className="mt-2 block text-sm uppercase tracking-[0.18em] text-white/70">
+            <div key={m.label} className="rounded-[24px] border border-white/90 bg-white/80 px-5 py-5">
+              <span className="block font-display text-4xl font-bold text-slate-950">{m.value}</span>
+              <span className="mt-2 block text-sm uppercase tracking-[0.18em] text-brand-leaf">
                 {m.label}
               </span>
             </div>
@@ -548,17 +622,17 @@ export function HomePage() {
               </div>
             </div>
 
-            <div className="mt-8 rounded-[28px] border border-slate-200/80 bg-slate-950 px-6 py-6 text-white shadow-xl">
+            <div className="mt-8 rounded-[28px] border border-brand-moss/80 bg-brand-sun/95 px-6 py-6 text-slate-950 shadow-xl">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <span className="text-xs font-extrabold uppercase tracking-[0.24em] text-brand-moss">
+                  <span className="text-xs font-extrabold uppercase tracking-[0.24em] text-brand-leaf">
                     {whySolarContent.liveTakeawayLabel}
                   </span>
-                  <p className="mt-3 max-w-3xl text-base leading-7 text-white/80">
+                  <p className="mt-3 max-w-3xl text-base leading-7 text-slate-700">
                     {activeStory.summary}
                   </p>
                 </div>
-                <div className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/80">
+                <div className="rounded-full border border-brand-moss bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700">
                   Battery charge: {batteryCharge}%
                 </div>
               </div>
@@ -586,7 +660,7 @@ export function HomePage() {
 
         <section
           id="projects"
-          className="mt-10 rounded-[36px] bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 px-5 py-16 shadow-glow sm:px-8"
+          className="mt-10 rounded-[36px] border border-brand-moss/70 bg-gradient-to-br from-brand-sun via-white to-brand-moss/60 px-5 py-16 shadow-glow sm:px-8"
         >
           <SectionHeading
             eyebrow="Portfolio"
@@ -595,15 +669,15 @@ export function HomePage() {
           />
 
           {loading ? (
-            <p className="mt-8 text-base text-white/70">Loading projects...</p>
+            <p className="mt-8 text-base text-slate-600">Loading projects...</p>
           ) : posts.length === 0 ? (
-            <div className="mt-8 rounded-[28px] border border-white/10 bg-white/5 p-6 text-white/75">
+            <div className="mt-8 rounded-[28px] border border-brand-moss/80 bg-white/80 p-6 text-slate-600">
               No published projects yet. Use the admin dashboard to add the first one.
             </div>
           ) : (
             <div className="mt-10 grid gap-6 lg:grid-cols-3">
               {posts.map((post) => (
-                <article key={post._id} className="overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-xl backdrop-blur-lg">
+                <article key={post._id} className="overflow-hidden rounded-[28px] border border-brand-moss/80 bg-white/80 shadow-xl backdrop-blur-lg">
                   <div className="overflow-hidden">
                     <img
                       src={
@@ -615,11 +689,11 @@ export function HomePage() {
                     />
                   </div>
                   <div className="p-6">
-                    <span className="inline-flex rounded-full bg-brand-green/20 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand-moss">
+                    <span className="inline-flex rounded-full bg-brand-moss px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-brand-leaf">
                       {post.category}
                     </span>
-                    <h3 className="mt-4 font-display text-2xl font-bold text-white">{post.title}</h3>
-                    <p className="mt-3 text-base leading-7 text-white/70">{post.summary}</p>
+                    <h3 className="mt-4 font-display text-2xl font-bold text-slate-950">{post.title}</h3>
+                    <p className="mt-3 text-base leading-7 text-slate-600">{post.summary}</p>
                   </div>
                 </article>
               ))}
@@ -649,8 +723,8 @@ export function HomePage() {
                   </span>
                 </div>
 
-                <div className="mt-6 rounded-[24px] bg-slate-950 px-5 py-5 text-white">
-                  <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-brand-moss">System price</span>
+                <div className="mt-6 rounded-[24px] border border-brand-moss/80 bg-brand-sun px-5 py-5 text-slate-950">
+                  <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-brand-leaf">System price</span>
                   <strong className="mt-3 block font-display text-4xl font-bold">{formatAmount(plan.price)}</strong>
                 </div>
 
@@ -697,18 +771,18 @@ export function HomePage() {
             </div>
 
             <div className="glass-panel rounded-[32px] p-7">
-              <div className="rounded-[26px] bg-slate-950 px-5 py-5 text-white">
-                <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-brand-moss">
+              <div className="rounded-[26px] border border-brand-moss/80 bg-brand-sun px-5 py-5 text-slate-950">
+                <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-brand-leaf">
                   {urgencyContent.slotsTitle}
                 </span>
                 <div className="mt-5 grid gap-3">
-                  <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-4">
+                  <div className="rounded-[20px] border border-white/90 bg-white/75 px-4 py-4">
                     <strong className="block font-display text-3xl font-bold">{urgencyContent.residentialSlots}</strong>
-                    <span className="text-sm text-white/70">{urgencyContent.residentialLabel}</span>
+                    <span className="text-sm text-slate-600">{urgencyContent.residentialLabel}</span>
                   </div>
-                  <div className="rounded-[20px] border border-white/10 bg-white/5 px-4 py-4">
+                  <div className="rounded-[20px] border border-white/90 bg-white/75 px-4 py-4">
                     <strong className="block font-display text-3xl font-bold">{urgencyContent.commercialSlots}</strong>
-                    <span className="text-sm text-white/70">{urgencyContent.commercialLabel}</span>
+                    <span className="text-sm text-slate-600">{urgencyContent.commercialLabel}</span>
                   </div>
                 </div>
               </div>
@@ -819,11 +893,11 @@ export function HomePage() {
                 </div>
               </div>
 
-              <div className="rounded-[30px] bg-slate-950 px-6 py-6 text-white shadow-glow">
-                <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-brand-moss">
+              <div className="rounded-[30px] border border-brand-moss/80 bg-brand-sun px-6 py-6 text-slate-950 shadow-glow">
+                <span className="text-xs font-extrabold uppercase tracking-[0.22em] text-brand-leaf">
                   Fastest response when you share
                 </span>
-                <ul className="mt-5 space-y-3 text-sm leading-7 text-white/80">
+                <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-700">
                   {contactContent.responseTips.map((tip) => (
                     <li key={tip}>{tip}</li>
                   ))}
