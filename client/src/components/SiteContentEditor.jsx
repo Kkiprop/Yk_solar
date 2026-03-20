@@ -94,11 +94,14 @@ export function SiteContentEditor({ siteContent, setSiteContent, onSave, saving,
         <div className="mt-6 space-y-6">
           <EditorCard title="Navigation & Hero" description="Top navigation links and the main hero banner.">
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Admin button label">
-                <input className="field-input" value={siteContent.nav.adminLabel} onChange={handleFieldChange('nav.adminLabel')} />
+              <Field label="Navbar CTA label">
+                <input className="field-input" value={siteContent.nav.ctaLabel} onChange={handleFieldChange('nav.ctaLabel')} />
+              </Field>
+              <Field label="Navbar CTA target">
+                <input className="field-input" value={siteContent.nav.ctaHref} onChange={handleFieldChange('nav.ctaHref')} />
               </Field>
               <div className="rounded-[22px] bg-brand-moss/45 px-4 py-4 text-sm leading-6 text-slate-700">
-                Navbar links, hero CTAs, hero image, and hero highlight all update live from this form after save.
+                Navbar links, the send inquiry CTA, hero CTAs, hero image, and hero highlight all update live from this form after save.
               </div>
             </div>
 
@@ -525,8 +528,17 @@ export function SiteContentEditor({ siteContent, setSiteContent, onSave, saving,
               <Field label="Footer description">
                 <textarea className="field-input min-h-[120px] resize-y" value={siteContent.footer.description} onChange={handleFieldChange('footer.description')} />
               </Field>
+              <Field label="Footer staff portal label">
+                <input className="field-input" value={siteContent.footer.adminLinkLabel} onChange={handleFieldChange('footer.adminLinkLabel')} />
+              </Field>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Footer staff portal target">
+                <input className="field-input" value={siteContent.footer.adminLinkHref} onChange={handleFieldChange('footer.adminLinkHref')} />
+              </Field>
               <div className="rounded-[22px] bg-brand-moss/45 px-4 py-4 text-sm leading-6 text-slate-700">
-                Footer links and contact details will update the public site after you save section content.
+                Footer links, the staff portal link, and contact details will update the public site after you save section content.
               </div>
             </div>
 

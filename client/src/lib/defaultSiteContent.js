@@ -6,7 +6,8 @@ export const defaultSiteContent = {
       { label: 'Why Solar', href: '#why-solar' },
       { label: 'Work', href: '#projects' },
     ],
-    adminLabel: 'Staff Portal',
+    ctaLabel: 'Send Inquiry',
+    ctaHref: '#contact',
   },
   hero: {
     eyebrow: 'Future-ready energy',
@@ -200,6 +201,8 @@ export const defaultSiteContent = {
   },
   footer: {
     description: 'Reliable energy, professional engineering, and systems built to last.',
+    adminLinkLabel: 'Staff Portal',
+    adminLinkHref: '/admin',
     links: [
       { label: 'About', href: '#about' },
       { label: 'Services', href: '#services' },

@@ -20,6 +20,8 @@ export const ensureAdminUser = async () => {
       name,
       email,
       passwordHash,
+      role: 'admin',
+      isActive: true,
     });
     console.log(`Seeded admin user for ${email}`);
     return;
@@ -27,9 +29,11 @@ export const ensureAdminUser = async () => {
 
   const passwordMatches = await bcrypt.compare(password, existingAdmin.passwordHash);
 
-  if (!passwordMatches || existingAdmin.name !== name) {
+  if (!passwordMatches || existingAdmin.name !== name || existingAdmin.role !== 'admin' || !existingAdmin.isActive) {
     existingAdmin.name = name;
     existingAdmin.passwordHash = passwordHash;
+    existingAdmin.role = 'admin';
+    existingAdmin.isActive = true;
     await existingAdmin.save();
   }
 };

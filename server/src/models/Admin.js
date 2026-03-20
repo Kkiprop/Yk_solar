@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+export const ADMIN_ROLES = ['admin', 'editor', 'support'];
+
 const adminSchema = new mongoose.Schema(
   {
     name: {
@@ -17,6 +19,16 @@ const adminSchema = new mongoose.Schema(
     passwordHash: {
       type: String,
       required: true,
+    },
+    role: {
+      type: String,
+      enum: ADMIN_ROLES,
+      default: 'admin',
+      required: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
     lastLoginAt: {
       type: Date,

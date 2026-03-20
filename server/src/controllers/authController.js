@@ -7,6 +7,8 @@ const sanitizeAdmin = (admin) => ({
   id: admin.id || admin._id?.toString(),
   name: admin.name,
   email: admin.email,
+  role: admin.role,
+  isActive: admin.isActive,
   lastLoginAt: admin.lastLoginAt || null,
 });
 
@@ -22,6 +24,10 @@ export const loginAdmin = async (request, response) => {
 
   if (!admin) {
     return response.status(401).json({ message: 'Invalid email or password.' });
+  }
+
+  if (!admin.isActive) {
+    return response.status(403).json({ message: 'This account has been disabled.' });
   }
 
   const passwordMatches = await bcrypt.compare(password, admin.passwordHash);

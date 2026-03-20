@@ -1,5 +1,6 @@
 import { ContactInquiry } from '../models/ContactInquiry.js';
 import { sendContactInquiryNotification } from '../utils/contactInquiryMailer.js';
+import xlsx from 'xlsx';
 
 const allowedStatuses = new Set(['new', 'read', 'resolved']);
 
@@ -35,6 +36,34 @@ export const getAdminContactInquiries = async (_request, response) => {
     .lean();
 
   response.json(inquiries);
+};
+
+export const exportAdminContactInquiries = async (_request, response) => {
+  const inquiries = await ContactInquiry.find()
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const rows = inquiries.map((inquiry) => ({
+    Name: inquiry.name,
+    Phone: inquiry.phone,
+    Email: inquiry.email,
+    'System Size': inquiry.systemSize || '',
+    Location: inquiry.location || '',
+    Message: inquiry.message,
+    Status: inquiry.status,
+    'Created At': new Date(inquiry.createdAt).toISOString(),
+    'Updated At': new Date(inquiry.updatedAt).toISOString(),
+  }));
+
+  const workbook = xlsx.utils.book_new();
+  const worksheet = xlsx.utils.json_to_sheet(rows);
+  xlsx.utils.book_append_sheet(workbook, worksheet, 'Inquiries');
+
+  const fileBuffer = xlsx.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+  response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  response.setHeader('Content-Disposition', `attachment; filename="contact-inquiries-${new Date().toISOString().slice(0, 10)}.xlsx"`);
+  response.send(fileBuffer);
 };
 
 export const updateAdminContactInquiryStatus = async (request, response) => {

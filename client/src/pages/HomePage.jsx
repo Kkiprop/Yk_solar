@@ -225,9 +225,9 @@ export function HomePage() {
                 {link.label}
               </a>
             ))}
-            <Link to="/admin" className="ghost-btn px-4 py-2 text-sm">
-              {siteContent.nav.adminLabel}
-            </Link>
+            <a className="ghost-btn px-4 py-2 text-sm" href={siteContent.nav.ctaHref}>
+              {siteContent.nav.ctaLabel}
+            </a>
           </div>
 
           {isMobileMenuOpen ? (
@@ -242,9 +242,9 @@ export function HomePage() {
                   {link.label}
                 </a>
               ))}
-              <Link to="/admin" className="ghost-btn w-full justify-center" onClick={handleNavLinkClick}>
-                {siteContent.nav.adminLabel}
-              </Link>
+              <a className="ghost-btn w-full justify-center" href={siteContent.nav.ctaHref} onClick={handleNavLinkClick}>
+                {siteContent.nav.ctaLabel}
+              </a>
             </div>
           ) : null}
         </nav>
@@ -797,6 +797,9 @@ export function HomePage() {
                   {link.label}
                 </a>
               ))}
+              <Link className="transition hover:text-slate-950" to={footerContent.adminLinkHref}>
+                {footerContent.adminLinkLabel}
+              </Link>
             </nav>
           </div>
 
