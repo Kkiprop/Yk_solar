@@ -18,7 +18,7 @@ export const defaultSiteContent = {
     secondaryCtaHref: '#projects',
     highlightValue: '92%',
     highlightLabel: 'Avg. savings',
-    imageUrl: 'https://media.istockphoto.com/id/2209090636/photo/worker-installing-solar-panels-at-sunset.jpg?s=1024x1024',
+    imageUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1600&q=80',
   },
   metrics: [
     { value: '120+', label: 'Projects delivered' },
@@ -77,7 +77,7 @@ export const defaultSiteContent = {
     title: 'Recent Installations',
     description: 'Real results from our latest deployments across the region.',
     emptyState: 'No published projects yet. Use the admin dashboard to add the first one.',
-    fallbackImageUrl: 'https://media.istockphoto.com/id/1405880267/photo/two-engineers-installing-solar-panels-on-roof.webp?a=1&b=1&s=612x612',
+    fallbackImageUrl: 'https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1200&q=80',
   },
   whySolar: {
     eyebrow: 'Why Solar Now',
