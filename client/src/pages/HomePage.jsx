@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaArrowRight,
@@ -44,7 +44,6 @@ export function HomePage() {
   const [loading, setLoading] = useState(true);
   const [siteContent, setSiteContent] = useState(defaultSiteContent);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [solarProgress, setSolarProgress] = useState(0);
   const [contactForm, setContactForm] = useState({
     name: '',
     phone: '',
@@ -55,7 +54,6 @@ export function HomePage() {
   });
   const [contactStatus, setContactStatus] = useState('');
   const [contactSaving, setContactSaving] = useState(false);
-  const solarStoryRef = useRef(null);
 
   useEffect(() => {
     const fetchHomepageData = async () => {
@@ -80,31 +78,6 @@ export function HomePage() {
     };
 
     fetchHomepageData();
-  }, []);
-
-  useEffect(() => {
-    const updateSolarProgress = () => {
-      if (!solarStoryRef.current) {
-        return;
-      }
-
-      const rect = solarStoryRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || 1;
-      const travel = rect.height + viewportHeight * 0.25;
-      const progress = (viewportHeight - rect.top) / travel;
-      const nextProgress = Math.min(Math.max(progress, 0), 1);
-
-      setSolarProgress((current) => (Math.abs(current - nextProgress) > 0.01 ? nextProgress : current));
-    };
-
-    updateSolarProgress();
-    window.addEventListener('scroll', updateSolarProgress, { passive: true });
-    window.addEventListener('resize', updateSolarProgress);
-
-    return () => {
-      window.removeEventListener('scroll', updateSolarProgress);
-      window.removeEventListener('resize', updateSolarProgress);
-    };
   }, []);
 
   useEffect(() => {
@@ -143,27 +116,20 @@ export function HomePage() {
       summary: item.description,
       statValue: item.statValue,
       statLabel: item.statLabel,
-      chargePercent: 0,
     })),
-    ...advantageItems.map((item, index) => ({
+    ...advantageItems.map((item) => ({
       phase: item.phase,
       title: item.title,
       summary: item.description,
       statValue: item.statValue,
       statLabel: item.statLabel,
-      chargePercent: Math.round(((index + 1) / Math.max(advantageItems.length, 1)) * 100),
     })),
   ];
-  const activeStoryIndex = Math.min(
-    solarTimelineItems.length - 1,
-    Math.floor(solarProgress * solarTimelineItems.length),
-  );
-  const activeStory = solarTimelineItems[activeStoryIndex];
   const batterySegments = 6;
-  const batteryCharge = activeStory.chargePercent;
+  const batteryCharge = 50;
   const filledSegments = Math.round((batteryCharge / 100) * batterySegments);
-  const revealedChallenges = Math.min(activeStoryIndex + 1, challengeItems.length);
-  const revealedAdvantages = Math.max(activeStoryIndex - challengeItems.length + 1, 0);
+  const takeAwaySummary =
+    'The upper empty half represents the ongoing disadvantages of conventional power, while the lower charged half represents the practical advantages solar starts delivering.';
 
   const handleContactChange = (event) => {
     const { name, value } = event.target;
@@ -372,8 +338,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section id="why-solar" ref={solarStoryRef} className="relative mt-2 min-h-[260vh]">
-          <div className="sticky top-5 rounded-[36px] border border-white/60 bg-white/75 px-5 py-12 shadow-glow backdrop-blur-xl sm:px-8 lg:px-10">
+        <section id="why-solar" className="relative mt-2 rounded-[36px] border border-white/60 bg-white/75 px-5 py-12 shadow-glow backdrop-blur-xl sm:px-8 lg:px-10">
             <SectionHeading
               eyebrow={whySolarContent.eyebrow}
               title={whySolarContent.title}
@@ -383,7 +348,7 @@ export function HomePage() {
 
             <div className="mt-6 flex justify-center">
               <div className="rounded-full border border-slate-200/80 bg-white/90 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.24em] text-slate-600 shadow-sm">
-                {activeStory.phase} of {solarTimelineItems.length.toString().padStart(2, '0')}
+                {solarTimelineItems.length.toString().padStart(2, '0')} stages visible at once
               </div>
             </div>
 
@@ -391,42 +356,28 @@ export function HomePage() {
               <div className="space-y-4">
                 <h3 className="font-display text-2xl font-bold text-slate-950">{whySolarContent.challengeHeading}</h3>
                 <div className="space-y-3">
-                  {challengeItems.map((item, index) => {
-                    const isVisible = index < revealedChallenges;
-                    const isActive = activeStoryIndex < challengeItems.length && index === activeStoryIndex;
-
-                    return (
-                      <div
-                        key={item.phase}
-                        className={`rounded-[24px] border px-4 py-4 transition duration-300 ${
-                          isActive
-                            ? 'border-rose-200 bg-rose-50 shadow-sm'
-                            : isVisible
-                              ? 'border-slate-200/80 bg-white/85 opacity-100'
-                              : 'border-slate-200/50 bg-white/40 opacity-30'
-                        }`}
-                      >
-                        <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-500">
-                          {item.phase}
-                        </span>
-                        <h4 className="mt-2 font-display text-lg font-bold text-slate-950">{item.title}</h4>
-                        <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
-                      </div>
-                    );
-                  })}
+                  {challengeItems.map((item) => (
+                    <div key={item.phase} className="rounded-[24px] border border-slate-200/80 bg-white/85 px-4 py-4">
+                      <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-slate-500">
+                        {item.phase}
+                      </span>
+                      <h4 className="mt-2 font-display text-lg font-bold text-slate-950">{item.title}</h4>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div className="relative mx-auto flex w-full max-w-[320px] flex-col items-center">
                 <div className="absolute inset-x-8 top-12 -z-10 h-44 rounded-full bg-brand-green/15 blur-3xl" />
                 <div className="mb-5 rounded-full bg-brand-moss px-4 py-2 text-xs font-extrabold uppercase tracking-[0.24em] text-brand-leaf">
-                  {activeStory.phase}
+                  Static energy split
                 </div>
                 <div className="relative w-full rounded-[36px] border-[10px] border-slate-950 bg-slate-950/95 px-5 pb-5 pt-8 shadow-[0_32px_80px_rgba(15,23,42,0.28)]">
                   <div className="absolute left-1/2 top-[-18px] h-4 w-20 -translate-x-1/2 rounded-t-2xl bg-slate-950" />
                   <div className="relative flex h-[420px] items-end overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-b from-slate-900 via-slate-950 to-black p-4">
                     <div
-                      className="absolute inset-x-0 bottom-0 rounded-b-[20px] bg-gradient-to-t from-brand-green via-lime-300 to-emerald-100 transition-all duration-500"
+                      className="absolute inset-x-0 bottom-0 rounded-b-[20px] bg-gradient-to-t from-brand-green via-lime-300 to-emerald-100"
                       style={{ height: `${batteryCharge}%` }}
                     />
                     <div className="relative z-10 grid w-full gap-3">
@@ -436,7 +387,7 @@ export function HomePage() {
                         return (
                           <div
                             key={`segment-${index + 1}`}
-                            className={`h-12 rounded-2xl border transition duration-300 ${
+                            className={`h-12 rounded-2xl border ${
                               isFilled
                                 ? 'border-white/70 bg-white/25 shadow-[0_0_24px_rgba(226,255,184,0.55)]'
                                 : 'border-white/10 bg-white/5'
@@ -448,9 +399,9 @@ export function HomePage() {
                   </div>
                 </div>
                 <div className="mt-5 w-full rounded-[28px] border border-brand-moss/70 bg-brand-moss/70 px-5 py-5 text-center shadow-sm">
-                  <strong className="block font-display text-4xl font-bold text-slate-950">{activeStory.statValue}</strong>
+                  <strong className="block font-display text-4xl font-bold text-slate-950">50%</strong>
                   <span className="mt-2 block text-sm font-semibold leading-6 text-slate-700">
-                    {activeStory.statLabel}
+                    Battery split between disadvantages above and advantages below
                   </span>
                 </div>
               </div>
@@ -458,29 +409,18 @@ export function HomePage() {
               <div className="space-y-4">
                 <h3 className="font-display text-2xl font-bold text-slate-950">{whySolarContent.advantageHeading}</h3>
                 <div className="space-y-3">
-                  {advantageItems.map((item, index) => {
-                    const isVisible = index < revealedAdvantages;
-                    const isActive = activeStoryIndex >= challengeItems.length && index === activeStoryIndex - challengeItems.length;
-
-                    return (
-                      <div
-                        key={`${item.phase}-advantage`}
-                        className={`rounded-[24px] border px-4 py-4 transition duration-300 ${
-                          isActive
-                            ? 'border-brand-moss bg-brand-moss/70 shadow-sm'
-                            : isVisible
-                              ? 'border-slate-200/80 bg-white/85 opacity-100'
-                              : 'border-slate-200/50 bg-white/40 opacity-30'
-                        }`}
-                      >
-                        <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-brand-leaf">
-                          {item.phase}
-                        </span>
-                        <h4 className="mt-2 font-display text-lg font-bold text-slate-950">{item.title}</h4>
-                        <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
-                      </div>
-                    );
-                  })}
+                  {advantageItems.map((item) => (
+                    <div
+                      key={`${item.phase}-advantage`}
+                      className="rounded-[24px] border border-slate-200/80 bg-white/85 px-4 py-4"
+                    >
+                      <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-brand-leaf">
+                        {item.phase}
+                      </span>
+                      <h4 className="mt-2 font-display text-lg font-bold text-slate-950">{item.title}</h4>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -492,15 +432,14 @@ export function HomePage() {
                     {whySolarContent.liveTakeawayLabel}
                   </span>
                   <p className="mt-3 max-w-3xl text-base leading-7 text-slate-700">
-                    {activeStory.summary}
+                    {takeAwaySummary}
                   </p>
                 </div>
                 <div className="rounded-full border border-brand-moss bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700">
-                  Battery charge: {batteryCharge}%
+                  Battery split: {batteryCharge}% charged / {100 - batteryCharge}% open
                 </div>
               </div>
             </div>
-          </div>
         </section>
 
         <section className="mt-10 rounded-[36px] border border-brand-moss/60 bg-gradient-to-br from-brand-moss/50 via-white/65 to-white/40 px-5 py-16 shadow-glow sm:px-8">

@@ -82,21 +82,21 @@ export const defaultSiteContent = {
   },
   whySolar: {
     eyebrow: 'Why Solar Now',
-    title: 'Four scrolls from energy risk to energy control',
-    description: 'The first two scroll stages expose the hidden cost of conventional power. The third and fourth stages begin charging the battery as solar advantages take over.',
+    title: 'From energy risk to energy control',
+    description: 'A single view of the ongoing disadvantages of conventional power and the practical advantages solar begins delivering.',
     challengeHeading: 'What traditional power keeps costing',
     advantageHeading: 'What solar starts improving',
     liveTakeawayLabel: 'Live takeaway',
     challengeStages: [
       {
-        phase: 'Scroll 01',
+        phase: 'Stage 01',
         title: 'Tariff pressure keeps stacking',
         description: 'Grid-only power leaves you exposed to rising tariffs and unstable daytime supply when usage is highest.',
         statValue: '8-15%',
         statLabel: 'Annual tariff pressure many businesses face',
       },
       {
-        phase: 'Scroll 02',
+        phase: 'Stage 02',
         title: 'Backup power keeps burning cash',
         description: 'Generators reduce outage pain with noise, fuel logistics, and recurring maintenance that compounds monthly.',
         statValue: 'Fuel + service',
@@ -105,14 +105,14 @@ export const defaultSiteContent = {
     ],
     advantageStages: [
       {
-        phase: 'Scroll 03',
+        phase: 'Stage 03',
         title: 'Solar begins offsetting peak demand',
         description: 'Solar converts your roof into a productive asset that cuts the most expensive daytime consumption first.',
         statValue: '50%',
         statLabel: 'Battery charge after the first solar gain stage',
       },
       {
-        phase: 'Scroll 04',
+        phase: 'Stage 04',
         title: 'Storage turns savings into resilience',
         description: 'Battery-backed solar delivers silent reserve power, stronger savings, and long-term operational control.',
         statValue: '100%',
