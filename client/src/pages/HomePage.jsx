@@ -125,9 +125,41 @@ export function HomePage() {
       statLabel: item.statLabel,
     })),
   ];
-  const batterySegments = 6;
-  const batteryCharge = 50;
-  const filledSegments = Math.round((batteryCharge / 100) * batterySegments);
+  // Battery animation: 5 steps (0, 25, 50, 70, 100)
+  const batterySteps = [0, 25, 50, 70, 100];
+  const [batteryStep, setBatteryStep] = useState(0); // index in batterySteps
+  const batterySegments = batterySteps.length;
+  const batteryCharge = batterySteps[batteryStep];
+  const filledSegments = batteryStep;
+
+  // Animation on scroll
+  useEffect(() => {
+    const batterySection = document.getElementById('battery-section');
+    if (!batterySection) return;
+    let observer;
+    let timeoutIds = [];
+
+    const handleIntersect = (entries) => {
+      if (entries[0].isIntersecting) {
+        // Animate through steps
+        batterySteps.forEach((_, idx) => {
+          const timeout = setTimeout(() => setBatteryStep(idx), idx * 400);
+          timeoutIds.push(timeout);
+        });
+        observer.disconnect();
+      }
+    };
+
+    observer = new window.IntersectionObserver(handleIntersect, {
+      threshold: 0.4,
+    });
+    observer.observe(batterySection);
+
+    return () => {
+      observer && observer.disconnect();
+      timeoutIds.forEach(clearTimeout);
+    };
+  }, []);
   const takeAwaySummary =
     'The upper empty half represents the ongoing disadvantages of conventional power, while the lower charged half represents the practical advantages solar starts delivering.';
 
@@ -368,7 +400,7 @@ export function HomePage() {
                 </div>
               </div>
 
-              <div className="relative mx-auto flex w-full max-w-[320px] flex-col items-center">
+              <div id="battery-section" className="relative mx-auto flex w-full max-w-[320px] flex-col items-center">
                 <div className="absolute inset-x-8 top-12 -z-10 h-44 rounded-full bg-brand-green/15 blur-3xl" />
                 <div className="mb-5 rounded-full bg-brand-moss px-4 py-2 text-xs font-extrabold uppercase tracking-[0.24em] text-brand-leaf">
                   Static energy split
@@ -377,17 +409,16 @@ export function HomePage() {
                   <div className="absolute left-1/2 top-[-18px] h-4 w-20 -translate-x-1/2 rounded-t-2xl bg-slate-950" />
                   <div className="relative flex h-[420px] items-end overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-b from-slate-900 via-slate-950 to-black p-4">
                     <div
-                      className="absolute inset-x-0 bottom-0 rounded-b-[20px] bg-gradient-to-t from-brand-green via-lime-300 to-emerald-100"
+                      className="absolute inset-x-0 bottom-0 rounded-b-[20px] bg-gradient-to-t from-brand-green via-lime-300 to-emerald-100 transition-all duration-400"
                       style={{ height: `${batteryCharge}%` }}
                     />
                     <div className="relative z-10 grid w-full gap-3">
-                      {Array.from({ length: batterySegments }).map((_, index) => {
-                        const isFilled = index < filledSegments;
-
+                      {batterySteps.map((step, index) => {
+                        const isFilled = index <= batteryStep && batteryStep > 0;
                         return (
                           <div
                             key={`segment-${index + 1}`}
-                            className={`h-12 rounded-2xl border ${
+                            className={`h-12 rounded-2xl border transition-all duration-400 ${
                               isFilled
                                 ? 'border-white/70 bg-white/25 shadow-[0_0_24px_rgba(226,255,184,0.55)]'
                                 : 'border-white/10 bg-white/5'
@@ -399,7 +430,7 @@ export function HomePage() {
                   </div>
                 </div>
                 <div className="mt-5 w-full rounded-[28px] border border-brand-moss/70 bg-brand-moss/70 px-5 py-5 text-center shadow-sm">
-                  <strong className="block font-display text-4xl font-bold text-slate-950">50%</strong>
+                  <strong className="block font-display text-4xl font-bold text-slate-950">{batteryCharge}%</strong>
                   <span className="mt-2 block text-sm font-semibold leading-6 text-slate-700">
                     Battery split between disadvantages above and advantages below
                   </span>
